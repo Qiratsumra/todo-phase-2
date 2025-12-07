@@ -29,9 +29,15 @@
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+*GATE: Must pass before proceeding with implementation.*
 
-[Gates determined based on constitution file]
+- [ ] **Code Quality**: Does the plan account for typed code (TypeScript/mypy), error handling, and testing (Jest/Pytest)?
+- [ ] **API Design**: Is the API design RESTful with standard status codes and a consistent JSON response format?
+- [ ] **Security**: Does the plan include JWT validation, user data isolation, and input sanitization?
+- [ ] **Database**: Is there a clear schema design, a plan for migrations (Alembic), and consideration for indexing?
+- [ ] **Frontend**: Does the plan define a component structure, state management strategy, and address accessibility?
+- [ ] **Documentation**: Is there a plan for API documentation (auto-gen), TSDoc, and updating the README?
+- [ ] **Git Workflow**: Does the plan adhere to Conventional Commits and the feature-branch PR process?
 
 ## Project Structure
 
@@ -48,51 +54,48 @@ specs/[###-feature]/
 ```
 
 ### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
-
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
-src/
-├── models/
-├── services/
-├── cli/
-└── lib/
-
-tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
+# Full-Stack Application Structure
 backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
+├── app/
+│   ├── __init__.py
+│   ├── main.py
+│   ├── api/
+│   │   ├── __init__.py
+│   │   └── v1/
+│   │       ├── __init__.py
+│   │       ├── endpoints/
+│   │       └── schemas/
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── config.py
+│   │   └── security.py
+│   ├── db/
+│   │   ├── __init__.py
+│   │   ├── base.py
+│   │   └── session.py
+│   └── services/
+│       ├── __init__.py
 └── tests/
+    ├── __init__.py
+    ├── conftest.py
+    └── api/
+        └── v1/
 
 frontend/
 ├── src/
+│   ├── app/
 │   ├── components/
+│   │   ├── shared/
+│   │   └── ui/
+│   ├── hooks/
+│   ├── lib/
 │   ├── pages/
 │   └── services/
 └── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+**Structure Decision**: The project will adopt a monorepo structure with a `backend` directory for the FastAPI application and a `frontend` directory for the Next.js application, as defined in the constitution.
 
 ## Complexity Tracking
 

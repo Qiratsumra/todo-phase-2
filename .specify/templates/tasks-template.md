@@ -20,56 +20,48 @@ description: "Task list template for feature implementation"
 
 ## Path Conventions
 
-- **Single project**: `src/`, `tests/` at repository root
-- **Web app**: `backend/src/`, `frontend/src/`
-- **Mobile**: `api/src/`, `ios/src/` or `android/src/`
-- Paths shown below assume single project - adjust based on plan.md structure
+- **Backend**: `backend/app/`, `backend/tests/`
+- **Frontend**: `frontend/src/`, `frontend/tests/`
+- Paths shown below assume the full-stack web app structure defined in `plan.md`.
 
-<!-- 
+<!--
   ============================================================================
   IMPORTANT: The tasks below are SAMPLE TASKS for illustration purposes only.
-  
+
   The /sp.tasks command MUST replace these with actual tasks based on:
-  - User stories from spec.md (with their priorities P1, P2, P3...)
-  - Feature requirements from plan.md
-  - Entities from data-model.md
-  - Endpoints from contracts/
-  
-  Tasks MUST be organized by user story so each story can be:
-  - Implemented independently
-  - Tested independently
-  - Delivered as an MVP increment
-  
+  - User stories from spec.md
+  - The technical plan in plan.md
+
   DO NOT keep these sample tasks in the generated tasks.md file.
   ============================================================================
 -->
 
 ## Phase 1: Setup (Shared Infrastructure)
 
-**Purpose**: Project initialization and basic structure
+**Purpose**: Project initialization and basic structure.
 
-- [ ] T001 Create project structure per implementation plan
-- [ ] T002 Initialize [language] project with [framework] dependencies
-- [ ] T003 [P] Configure linting and formatting tools
+- [ ] T001 Create `backend` and `frontend` project structures per `plan.md`.
+- [ ] T002 Initialize Python project with `uv` and FastAPI dependencies in `backend/`.
+- [ ] T003 Initialize Next.js project with TypeScript in `frontend/`.
+- [ ] T004 [P] Configure `ruff` for linting and formatting in `backend/`.
+- [ ] T005 [P] Configure `eslint` and `prettier` in `frontend/`.
 
 ---
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
-**Purpose**: Core infrastructure that MUST be complete before ANY user story can be implemented
+**Purpose**: Core infrastructure that MUST be complete before ANY user story can be implemented.
 
-**⚠️ CRITICAL**: No user story work can begin until this phase is complete
+- [ ] T006 Setup database schema and Alembic migrations in `backend/app/db/`.
+- [ ] T007 Implement JWT authentication/authorization middleware in `backend/app/core/security.py`.
+- [ ] T008 Setup API routing and base middleware in `backend/app/main.py`.
+- [ ] T009 Create base Pydantic schemas in `backend/app/api/v1/schemas/`.
+- [ ] T010 Configure error handling and logging infrastructure in `backend/`.
+- [ ] T011 Setup environment configuration (`.env` files) for both `backend` and `frontend`.
+- [ ] T012 [P] Setup global state management (e.g., Zustand) in `frontend/`.
+- [ ] T013 [P] Create shared UI component library in `frontend/src/components/ui/`.
 
-Examples of foundational tasks (adjust based on your project):
-
-- [ ] T004 Setup database schema and migrations framework
-- [ ] T005 [P] Implement authentication/authorization framework
-- [ ] T006 [P] Setup API routing and middleware structure
-- [ ] T007 Create base models/entities that all stories depend on
-- [ ] T008 Configure error handling and logging infrastructure
-- [ ] T009 Setup environment configuration management
-
-**Checkpoint**: Foundation ready - user story implementation can now begin in parallel
+**Checkpoint**: Foundation ready - user story implementation can now begin.
 
 ---
 
@@ -79,23 +71,25 @@ Examples of foundational tasks (adjust based on your project):
 
 **Independent Test**: [How to verify this story works on its own]
 
-### Tests for User Story 1 (OPTIONAL - only if tests requested) ⚠️
+### Tests for User Story 1 ⚠️
 
-> **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
+> **NOTE: Write these tests FIRST, ensure they FAIL before implementation.**
 
-- [ ] T010 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T011 [P] [US1] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T014 [P] [US1] Write Pytest integration test for the API endpoint in `backend/tests/api/v1/test_[name].py`.
+- [ ] T015 [P] [US1] Write React Testing Library test for the frontend component in `frontend/tests/components/[name].test.tsx`.
 
 ### Implementation for User Story 1
 
-- [ ] T012 [P] [US1] Create [Entity1] model in src/models/[entity1].py
-- [ ] T013 [P] [US1] Create [Entity2] model in src/models/[entity2].py
-- [ ] T014 [US1] Implement [Service] in src/services/[service].py (depends on T012, T013)
-- [ ] T015 [US1] Implement [endpoint/feature] in src/[location]/[file].py
-- [ ] T016 [US1] Add validation and error handling
-- [ ] T017 [US1] Add logging for user story 1 operations
+- [ ] T016 [P] [US1] Create database model in `backend/app/db/models/[model].py`.
+- [ ] T017 [P] [US1] Create Pydantic schema in `backend/app/api/v1/schemas/[schema].py`.
+- [ ] T018 [US1] Implement service logic in `backend/app/services/[service].py`.
+- [ ] T019 [US1] Implement FastAPI endpoint in `backend/app/api/v1/endpoints/[endpoint].py`.
+- [ ] T020 [P] [US1] Create React component in `frontend/src/components/[feature]/[Component].tsx`.
+- [ ] T021 [P] [US1] Create page in `frontend/src/app/pages/[page]/page.tsx`.
+- [ ] T022 [US1] Implement data fetching logic in the frontend service `frontend/src/services/api.ts`.
+- [ ] T023 [US1] Add validation and error handling to both backend and frontend.
 
-**Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
+**Checkpoint**: User Story 1 should be fully functional and testable.
 
 ---
 
