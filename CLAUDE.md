@@ -1,4 +1,4 @@
-# Gemini CLI Rules
+# Claude Code Rules
 
 This file is generated during init for the selected agent.
 
@@ -208,13 +208,3 @@ Wait for consent; never auto-create ADRs. Group related decisions (stacks, authe
 
 ## Code Standards
 See `.specify/memory/constitution.md` for code quality, testing, performance, security, and architecture principles.
-
-## Active Technologies
-- Python 3.11+ + FastAPI, SQLAlchemy, Alembic, Pydantic, Passlib (001-fullstack-todo-app)
-- TypeScript + Next.js 16+ (001-fullstack-todo-app)
-- PostgreSQL (Neon) (001-fullstack-todo-app)
-- Docker (001-fullstack-todo-app)
-
-## Recent Changes
-- **Last updated**: 2025-12-07
-- 001-fullstack-todo-app: Added Python 3.11+ + FastAPI, SQLAlchemy, Alembic, Pydantic, Passlib, TypeScript + Next.js 16+, PostgreSQL (Neon), Docker

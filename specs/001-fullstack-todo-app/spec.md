@@ -75,11 +75,26 @@ As a user, I want to be able to use the application on both my mobile phone and 
 ### Edge Cases
 
 -   What happens when a user tries to create a task with an empty title? (Should be rejected)
--   How does the system handle a request with an expired or invalid JWT? (Should return 401 Unauthorized)
--   What happens if a user tries to access or modify a task that belongs to another user? (Should be blocked and return 403 Forbidden or 404 Not Found)
+-   How does the system handle a request with an expired or invalid JWT? (Return 401 Unauthorized; frontend attempts silent refresh or redirects to login with preserved intended route.)
+-   How does the system handle concurrent updates by the same user? (Implement optimistic concurrency control with version/updated_at check, return 409 Conflict.)
 -   How does the application behave when the user is offline? (A clear error message should be displayed)
 
-## Requirements *(mandatory)*
+### SC-005: The API documentation is comprehensive and allows a new developer to understand and use the API within 30 minutes.
+
+## Clarifications
+
+### Session 2025-12-07
+
+- Q: What are the password strength requirements? → A: Min 12 chars, 3/4 char classes, common password list check.
+- Q: How should the system handle a JWT token expiring during an active user session? → A: Return 401 with clear error code; frontend attempts silent refresh if refresh token present, otherwise redirects to login with preserved intended route.
+- Q: How should the system handle potentially large task lists to ensure scalability and performance? → A: Cursor-based pagination (limit 25, max 100) with `limit` and `cursor` params.
+- Q: How should the system handle user account deletion and associated data, considering privacy regulations? → A: Implement soft-delete with configurable purge, data export, and email confirmation.
+- Q: How should the system handle concurrent updates to the same task by a single user to prevent data loss? → A: Optimistic concurrency control (version/updated_at check) with 409 Conflict on mismatch.
+- Q: How should the system protect against brute-force login attempts? → A: Per-IP and per-account exponential backoff; temporary lock after 5 failed attempts for 15 minutes.
+- Q: How should the system handle task title and description lengths, and should a description field be added? → A: Add `description` (max 4096 chars); `title` max 256 chars. Validate and truncate.
+- Q: What API versioning strategy should be implemented to manage changes and ensure backward compatibility? → A: Version APIs in URL (/v1/tasks), semantic versioning for breaking changes, deprecation headers/migration guides.
+- Q: How should API error responses be structured to ensure consistency, clarity, and debuggability for clients? → A: Standardized error envelope `{error: {code, message, details, trace_id}}`.
+- Q: What events and information should be captured in audit logs for security, compliance, and debugging? → A: Immutable audit logs for all authentication events, task CRUD, and sensitive actions; include trace IDs.
 
 ### Functional Requirements
 
@@ -92,13 +107,22 @@ As a user, I want to be able to use the application on both my mobile phone and 
 -   **FR-007**: The user interface MUST be responsive and usable on both mobile and desktop devices.
 -   **FR-008**: The system MUST securely store user passwords using a strong hashing algorithm (e.g., bcrypt).
 -   **FR-009**: The API MUST be RESTful and provide clear status codes for all operations (200, 201, 204, 400, 401, 403, 404).
+-   **FR-010**: The system MUST enforce password strength: minimum 12 characters, at least 3 of 4 character classes (uppercase, lowercase, digit, symbol), and check against a common password list.
+-   **FR-011**: The system MUST implement cursor-based pagination for task lists, supporting `limit` (default 25, max 100) and `cursor` parameters.
+-   **FR-012**: The system MUST provide a user account deletion process that soft-deletes user data, initiates a configurable purge, offers data export, and confirms deletion via email.
+-   **FR-013**: The system MUST implement optimistic concurrency control for task updates, using a version or `updated_at` check, returning a `409 Conflict` status code on detection of a mismatch.
+-   **FR-014**: The system MUST implement per-IP and per-account exponential backoff for login attempts, temporarily locking accounts after 5 failed attempts for 15 minutes.
+-   **FR-015**: The system MUST validate and enforce maximum lengths for task `title` (256 characters) and `description` (4096 characters), rejecting oversized payloads with a `413 Payload Too Large` error.
+-   **FR-016**: The API MUST implement versioning in the URL (e.g., `/v1/tasks`), follow semantic versioning for breaking changes, and provide deprecation headers and migration guides.
+-   **FR-017**: The API MUST provide standardized error responses using an envelope `{error: {code, message, details, trace_id}}`, with numeric machine-friendly codes and user-facing i18n keys.
+-   **FR-018**: The system MUST implement immutable audit logs for all authentication events, CRUD operations on tasks, and sensitive actions, including trace IDs in error logs.
 
 ### Key Entities *(include if feature involves data)*
 
 -   **User**: Represents a user of the application.
     -   Attributes: user_id (primary key), email (unique), hashed_password.
 -   **Task**: Represents a single to-do item.
-    -   Attributes: task_id (primary key), owner_id (foreign key to User), title, completed (boolean).
+    -   Attributes: task_id (primary key), owner_id (foreign key to User), title (max 256 chars), description (optional, max 4096 chars), completed (boolean).
     -   Relationship: A User can have many Tasks.
 
 ## Success Criteria *(mandatory)*
